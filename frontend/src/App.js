@@ -1,45 +1,59 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import UserList from "./components/User";
+import Menu from "./components/Menu";
+import Footer from "./components/Footer";
 
 class App extends React.Component {
   constructor(props) {
     super(props)
-  	this.state = {
-	    'users': []
-	  }
+    this.state = {
+      'users': [],
+    }
   }
 
   componentDidMount() {
-    const users = [
-      {
-        'username': 'user010',
-        'first_name': 'Egor',
-        'last_name': 'Zubov',
-        'birthday_year': 'zubov.e@ru.ru',
-      },
-      {
-        'username': 'user011',
-        'first_name': 'Aleks',
-        'last_name': 'Dedov',
-        'birthday_year': 'dedov.a@ru.ru',
-      },
-    ]
-    this.setState(
-      {
-        'users': users
-      }
-    )
+    axios.get('http://127.0.0.1:8000/api/authapp')
+      .then(response => {
+        const users = response.data
+        this.setState(
+          {
+            'users': users
+          }
+        )
+      }).catch(error => console.log(error))
+
+    // const users = [
+    //   {
+    //     'username': 'user010',
+    //     'first_name': 'Egor',
+    //     'last_name': 'Zubov',
+    //     'birthday_year': 'zubov.e@ru.ru',
+    //   },
+    //   {
+    //     'username': 'user011',
+    //     'first_name': 'Aleks',
+    //     'last_name': 'Dedov',
+    //     'birthday_year': 'dedov.a@ru.ru',
+    //   },
+    // ]
+
+    // this.setState(
+    //   {
+    //     'users': users
+    //   }
+    // )
   }
 
-  render () {
-	  return (
-	    <div>
-		    Main App
-        <UserList users={this.state.users}/>
-	    </div>
-	  )
+  render() {
+    return (
+      <div>
+        <Menu />
+        Main App
+        <UserList users={this.state.users} />
+        <Footer />
+      </div>
+    )
   }
 }
 
