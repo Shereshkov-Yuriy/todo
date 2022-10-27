@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import './App.css';
 import UserList from "./components/User";
 import Menu from "./components/Menu";
@@ -13,7 +14,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:8000/api/authapp')
+    axios.get('http://192.168.1.37:8000/api/authapp/')
       .then(response => {
         const users = response.data
         this.setState(
@@ -49,7 +50,7 @@ class App extends React.Component {
     return (
       <div>
         <Menu />
-        Main App
+        User List
         <UserList users={this.state.users} />
         <Footer />
       </div>
