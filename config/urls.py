@@ -21,9 +21,12 @@ from django.views.generic import RedirectView
 from rest_framework.routers import DefaultRouter
 
 from authapp.views import CustomUserModelViewSet
+from mainapp.views import ProjectModelViewSet, TodoModelViewSet
 
 router = DefaultRouter()
-router.register("authapp", CustomUserModelViewSet)
+router.register("users", CustomUserModelViewSet)
+router.register("projects", ProjectModelViewSet)
+router.register("todo", TodoModelViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

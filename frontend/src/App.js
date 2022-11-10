@@ -14,7 +14,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://192.168.1.37:8000/api/authapp/')
+    // view the page from the host
+    axios.get('http://192.168.1.41:8000/api/authapp/')
+    // view the page from the localhost
+    // axios.get('http://localhost:8000/api/authapp/')
       .then(response => {
         const users = response.data
         this.setState(
