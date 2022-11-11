@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import './App.css';
+import './components/css/fontawesome.all.min.css';
+import './components/css/bootstrap.min.css';
 import UserList from "./components/User";
 import Menu from "./components/Menu";
 import Footer from "./components/Footer";
@@ -15,9 +17,10 @@ class App extends React.Component {
 
   componentDidMount() {
     // view the page from the host
-    axios.get('http://192.168.1.41:8000/api/authapp/')
+    const apiUrl = "http://192.168.1.41:8000/api/users/"
     // view the page from the localhost
-    // axios.get('http://localhost:8000/api/authapp/')
+    // const apiUrl = "http://localhost:8000/api/users/"
+    axios.get(apiUrl)
       .then(response => {
         const users = response.data
         this.setState(
@@ -26,27 +29,6 @@ class App extends React.Component {
           }
         )
       }).catch(error => console.log(error))
-
-    // const users = [
-    //   {
-    //     'username': 'user010',
-    //     'first_name': 'Egor',
-    //     'last_name': 'Zubov',
-    //     'birthday_year': 'zubov.e@ru.ru',
-    //   },
-    //   {
-    //     'username': 'user011',
-    //     'first_name': 'Aleks',
-    //     'last_name': 'Dedov',
-    //     'birthday_year': 'dedov.a@ru.ru',
-    //   },
-    // ]
-
-    // this.setState(
-    //   {
-    //     'users': users
-    //   }
-    // )
   }
 
   render() {
@@ -55,6 +37,7 @@ class App extends React.Component {
         <Menu />
         User List
         <UserList users={this.state.users} />
+        <hr />
         <Footer />
       </div>
     )
