@@ -35,6 +35,7 @@ class App extends React.Component {
     return (
       <div>
         <Menu />
+        <hr />
         User List
         <UserList users={this.state.users} />
         <hr />
