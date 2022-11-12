@@ -9,7 +9,7 @@ class Project(models.Model):
     users = models.ManyToManyField(get_user_model(), verbose_name=_("Users"))
     
     def __str__(self) -> str:
-        return f"{self.title} ({self.users})"
+        return f"{self.title} {list(self.users.values_list('username', flat=True))}"
     
     class Meta:
         verbose_name = _("Project")
