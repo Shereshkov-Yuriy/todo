@@ -140,6 +140,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
 REST_FRAMEWORK = {
+    
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 100,
 
     'DEFAULT_RENDERER_CLASSES': (
         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
