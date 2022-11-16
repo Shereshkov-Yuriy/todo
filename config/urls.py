@@ -20,11 +20,11 @@ from django.urls import include, path
 from django.views.generic import RedirectView
 from rest_framework.routers import DefaultRouter
 
-from authapp.views import CustomUserModelViewSet
+from authapp.views import CustomUserCustomViewSet
 from mainapp.views import ProjectModelViewSet, TodoModelViewSet
 
 router = DefaultRouter()
-router.register("users", CustomUserModelViewSet)
+router.register("users", CustomUserCustomViewSet)
 router.register("projects", ProjectModelViewSet)
 router.register("todo", TodoModelViewSet)
 
