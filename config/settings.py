@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_filters",
     "corsheaders",
     "rest_framework",
     "authapp.apps.AuthappConfig",
@@ -140,6 +141,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
 REST_FRAMEWORK = {
+    
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 100,
