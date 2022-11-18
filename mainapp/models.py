@@ -27,6 +27,10 @@ class Todo(models.Model):
     def __str__(self):
         return f"{self.project} ({self.user})"
     
+    def delete(self, *args):
+        self.is_closed = True
+        self.save()
+        
     class Meta:
         verbose_name = _("TODO")
         verbose_name_plural = _("TODO")
