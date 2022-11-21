@@ -1,12 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import {BrowserRouter, Redirect, Route, Routes, Switch} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import './App.css';
 import './components/css/fontawesome.all.min.css';
 import './components/css/bootstrap.min.css';
 import UserList from "./components/User";
 import ProjectList from "./components/Project";
 import TodoList from "./components/Todo";
+import TodoProject from "./components/TodoProject";
 import Menu from "./components/Menu";
 import Footer from "./components/Footer";
 import NotFound404 from "./components/NotFound404";
@@ -71,9 +72,14 @@ class App extends React.Component {
           <hr />
 
           <Routes>
-            <Route exact path='/' element={<UserList users={this.state.users}/>} />
-            <Route exact path='/projects' element={<ProjectList projects={this.state.projects}/>} />
-            <Route exact path='/todo' element={<TodoList more_todo={this.state.more_todo}/>} />
+            <Route exact path='/users' element={<Navigate to='/'/>}/>
+            <Route exact path='/' element={<UserList users={this.state.users}/>}/>
+            <Route path='/projects'>
+              <Route index element={<ProjectList projects={this.state.projects}/>}/>
+              <Route path=':projectId' element={<TodoProject more_todo={this.state.more_todo}/>}/>
+            </Route>
+            
+            <Route exact path='/todo' element={<TodoList more_todo={this.state.more_todo}/>}/>
 
             <Route path='*' element={<NotFound404/>}/>
           </Routes>
