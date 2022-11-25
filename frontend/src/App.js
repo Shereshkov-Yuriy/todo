@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Cookies from "universal-cookie";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import "./App.css";
 import "./components/css/fontawesome.all.min.css";
@@ -20,6 +21,7 @@ class App extends React.Component {
       "users": [],
       "projects": [],
       "more_todo": [],
+      "token": "",
     }
   }
 
@@ -32,7 +34,9 @@ class App extends React.Component {
   }
 
   set_token(token) {
-
+    const cookies = new Cookies()
+    cookies.set("token", token)
+    this.setState({"token": token}, () => this.load_data())
   }
 
   get_token_storage() {
