@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes, Link} from "react-router-dom";
 import "./App.css";
 import "./components/css/fontawesome.all.min.css";
 import "./components/css/bootstrap.min.css";
@@ -26,7 +26,12 @@ class App extends React.Component {
   }
 
   logout() {
-    
+    this.set_token("")
+    this.setState({
+      "users": [],
+      "projects": [],
+      "more_todo": [],
+    })
   }
 
   is_auth() {
@@ -111,8 +116,16 @@ class App extends React.Component {
     return (
       <div>
         <BrowserRouter>
-
-          <Menu />
+          <nav>
+            <Menu />
+            <li>
+              {
+                this.is_auth()
+                ? <button onClick={() => this.logout()}>Logout</button>
+                : <Link to='/login'>Login</Link>
+              }
+            </li>
+          </nav>
           <hr />
 
           <Routes>
