@@ -26,11 +26,11 @@ class App extends React.Component {
   }
 
   logout() {
-
+    
   }
 
   is_auth() {
-
+    return !!this.state.token
   }
 
   set_token(token) {
@@ -40,7 +40,9 @@ class App extends React.Component {
   }
 
   get_token_storage() {
-
+    const cookies = new Cookies()
+    const token = cookies.get("token")
+    this.setState({"token": token}, () => this.load_data())
   }
 
   get_token(username, password) {
@@ -48,19 +50,26 @@ class App extends React.Component {
     const url_token = "http://192.168.1.41:8000/api-token/"
     axios.post(url_token, data).then(response => {
       this.set_token(response.data["token"])
-    }).catch(error => alert("Invalid username or password."))
+    }).catch(() => alert("Invalid username or password."))
   }
 
   get_headers() {
-
+    let headers = {
+      "Content-Type": "application/json"
+    }
+    if (this.is_auth()) {
+      headers["Authorization"] = "Token " + this.state.token
+    }
+    return headers
   }
 
   load_data() {
+    const headers = this.get_headers()
     // view the page from the host
-    const apiUrlUser = "http://192.168.1.41:8000/api/users/"
+    const urlUser = "http://192.168.1.41:8000/api/users/"
     // view the page from the localhost
-    // const apiUrlUser = "http://localhost:8000/api/users/"
-    axios.get(apiUrlUser).then(response => {
+    // const urlUser = "http://localhost:8000/api/users/"
+    axios.get(urlUser, {headers}).then(response => {
       this.setState(
         {
           "users": response.data
@@ -69,10 +78,10 @@ class App extends React.Component {
     }).catch(error => console.log(error))
 
     // view the page from the host
-    const apiUrlProject = "http://192.168.1.41:8000/api/projects/"
+    const urlProject = "http://192.168.1.41:8000/api/projects/"
     // view the page from the localhost
-    // const apiUrlProject = "http://localhost:8000/api/projects/"
-    axios.get(apiUrlProject).then(response => {
+    // const urlProject = "http://localhost:8000/api/projects/"
+    axios.get(urlProject, {headers}).then(response => {
       this.setState(
         {
           "projects": response.data
@@ -81,10 +90,10 @@ class App extends React.Component {
     }).catch(error => console.log(error))
 
     // view the page from the host
-    const apiUrlTodo = "http://192.168.1.41:8000/api/todo/"
+    const urlTodo = "http://192.168.1.41:8000/api/todo/"
     // view the page from the localhost
-    // const apiUrlProject = "http://localhost:8000/api/projects/"
-    axios.get(apiUrlTodo).then(response => {
+    // const urlTodo = "http://localhost:8000/api/todo/"
+    axios.get(urlTodo, {headers}).then(response => {
       this.setState(
         {
           "more_todo": response.data
@@ -95,7 +104,7 @@ class App extends React.Component {
   
 
   componentDidMount() {
-    this.load_data()
+    this.get_token_storage()
   }
 
   render() {
