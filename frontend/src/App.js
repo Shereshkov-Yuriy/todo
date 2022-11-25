@@ -4,6 +4,7 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import './App.css';
 import './components/css/fontawesome.all.min.css';
 import './components/css/bootstrap.min.css';
+import LoginForm from './components/Auth';
 import UserList from "./components/User";
 import ProjectList from "./components/Project";
 import TodoList from "./components/Todo";
@@ -22,45 +23,71 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
+  logout() {
+
+  }
+
+  is_auth() {
+
+  }
+
+  set_token(token) {
+
+  }
+
+  get_token_storage() {
+
+  }
+
+  get_token(username, password) {
+    console.log(username, password)
+  }
+
+  get_headers() {
+
+  }
+
+  load_data() {
     // view the page from the host
     const apiUrlUser = "http://192.168.1.41:8000/api/users/"
     // view the page from the localhost
     // const apiUrlUser = "http://localhost:8000/api/users/"
     axios.get(apiUrlUser).then(response => {
-        const users = response.data
-        this.setState(
-          {
-            'users': users
-          }
-        )
-      }).catch(error => console.log(error))
+      this.setState(
+        {
+          'users': response.data
+        }
+      )
+    }).catch(error => console.log(error))
 
     // view the page from the host
     const apiUrlProject = "http://192.168.1.41:8000/api/projects/"
     // view the page from the localhost
     // const apiUrlProject = "http://localhost:8000/api/projects/"
     axios.get(apiUrlProject).then(response => {
-        const projects = response.data
-        this.setState(
-          {
-            'projects': projects
-          }
-        )
-      }).catch(error => console.log(error))
+      this.setState(
+        {
+          'projects': response.data
+        }
+      )
+    }).catch(error => console.log(error))
 
     // view the page from the host
     const apiUrlTodo = "http://192.168.1.41:8000/api/todo/"
     // view the page from the localhost
     // const apiUrlProject = "http://localhost:8000/api/projects/"
     axios.get(apiUrlTodo).then(response => {
-        const more_todo = response.data
-        this.setState(
-          {
-            'more_todo': more_todo
-          }
-        )
-      }).catch(error => console.log(error))
+      this.setState(
+        {
+          'more_todo': response.data
+        }
+      )
+    }).catch(error => console.log(error))
+  }
+  
+
+  componentDidMount() {
+    this.load_data()
   }
 
   render() {
@@ -80,6 +107,8 @@ class App extends React.Component {
             </Route>
             
             <Route exact path='/todo' element={<TodoList more_todo={this.state.more_todo}/>}/>
+            <Route exact path='/login' element={<LoginForm get_token={(username, password) =>
+              this.get_token(username, password)}/>}/>
 
             <Route path='*' element={<NotFound404/>}/>
           </Routes>
