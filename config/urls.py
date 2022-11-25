@@ -34,7 +34,7 @@ urlpatterns = [
     path("", RedirectView.as_view(url="api/")),
     path("api-auth/", include("rest_framework.urls")),
     path("api/", include(router.urls)),
-    path("api-token-auth/", obtain_auth_token),
+    path("api-token/", obtain_auth_token),
 ]
 
 if settings.DEBUG:

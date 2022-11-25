@@ -1,10 +1,10 @@
-import React from 'react';
-import axios from 'axios';
+import React from "react";
+import axios from "axios";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import './App.css';
-import './components/css/fontawesome.all.min.css';
-import './components/css/bootstrap.min.css';
-import LoginForm from './components/Auth';
+import "./App.css";
+import "./components/css/fontawesome.all.min.css";
+import "./components/css/bootstrap.min.css";
+import LoginForm from "./components/Auth";
 import UserList from "./components/User";
 import ProjectList from "./components/Project";
 import TodoList from "./components/Todo";
@@ -17,9 +17,9 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'users': [],
-      'projects': [],
-      'more_todo': [],
+      "users": [],
+      "projects": [],
+      "more_todo": [],
     }
   }
 
@@ -40,7 +40,11 @@ class App extends React.Component {
   }
 
   get_token(username, password) {
-    console.log(username, password)
+    const data = {username: username, password: password}
+    const url_token = "http://192.168.1.41:8000/api-token/"
+    axios.post(url_token, data).then(response => {
+      this.set_token(response.data["token"])
+    }).catch(error => alert("Invalid username or password."))
   }
 
   get_headers() {
@@ -55,7 +59,7 @@ class App extends React.Component {
     axios.get(apiUrlUser).then(response => {
       this.setState(
         {
-          'users': response.data
+          "users": response.data
         }
       )
     }).catch(error => console.log(error))
@@ -67,7 +71,7 @@ class App extends React.Component {
     axios.get(apiUrlProject).then(response => {
       this.setState(
         {
-          'projects': response.data
+          "projects": response.data
         }
       )
     }).catch(error => console.log(error))
@@ -79,7 +83,7 @@ class App extends React.Component {
     axios.get(apiUrlTodo).then(response => {
       this.setState(
         {
-          'more_todo': response.data
+          "more_todo": response.data
         }
       )
     }).catch(error => console.log(error))
@@ -99,18 +103,18 @@ class App extends React.Component {
           <hr />
 
           <Routes>
-            <Route exact path='/users' element={<Navigate to='/'/>}/>
-            <Route exact path='/' element={<UserList users={this.state.users}/>}/>
-            <Route path='/projects'>
+            <Route exact path="/users" element={<Navigate to='/'/>}/>
+            <Route exact path="/" element={<UserList users={this.state.users}/>}/>
+            <Route path="/projects">
               <Route index element={<ProjectList projects={this.state.projects}/>}/>
-              <Route path=':projectId' element={<TodoProject more_todo={this.state.more_todo}/>}/>
+              <Route path=":projectId" element={<TodoProject more_todo={this.state.more_todo}/>}/>
             </Route>
             
-            <Route exact path='/todo' element={<TodoList more_todo={this.state.more_todo}/>}/>
-            <Route exact path='/login' element={<LoginForm get_token={(username, password) =>
+            <Route exact path="/todo" element={<TodoList more_todo={this.state.more_todo}/>}/>
+            <Route exact path="/login" element={<LoginForm get_token={(username, password) =>
               this.get_token(username, password)}/>}/>
 
-            <Route path='*' element={<NotFound404/>}/>
+            <Route path="*" element={<NotFound404/>}/>
           </Routes>
         </BrowserRouter>
 
