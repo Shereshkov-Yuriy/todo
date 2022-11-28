@@ -151,15 +151,15 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
+        # "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
+        "rest_framework.permissions.IsAuthenticated",
     ],
-    "DEFAULT_RENDERER_CLASSES": (
+    "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
-        "rest_framework.renderers.BrowsableAPIRenderer",
         "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
         "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
         # Any other renders
-    ),
+    ],
     "DEFAULT_PARSER_CLASSES": (
         # If you use MultiPartFormParser or FormParser, we also have a camel case version
         "djangorestframework_camel_case.parser.CamelCaseFormParser",
@@ -168,3 +168,6 @@ REST_FRAMEWORK = {
         # Any other parsers
     ),
 }
+
+if DEBUG:
+    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append("rest_framework.renderers.BrowsableAPIRenderer")
