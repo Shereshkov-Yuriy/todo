@@ -1,6 +1,8 @@
-# from mixer.backend.django import mixer
+import json
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from mixer.backend.django import mixer
 from rest_framework import status
 from rest_framework.test import APIClient, APIRequestFactory, APITestCase, force_authenticate
 
@@ -91,3 +93,21 @@ class TestTodoViewSet(APITestCase):
         todo_update = Todo.objects.get(id=todo.id)
         self.assertEqual(todo_update.todo, "test_update")
         self.client.logout()
+
+    def test_edit_mixer(self):
+        todo = mixer.blend(Todo)
+        self.client.login(username=self.username, password=self.password)
+        response = self.client.put(
+            f"{self.url}{todo.id}/", {"todo": "test_update", "user": todo.user.id, "project": todo.project.id}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        todo_update = Todo.objects.get(id=todo.id)
+        self.assertEqual(todo_update.todo, "test_update")
+        self.client.logout()
+
+    def test_edit_mixer_todo(self):
+        todo = mixer.blend(Todo, todo="test_edit_mixer_todo")
+        response = self.client.get(f"{self.url}{todo.id}/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response_todo = json.loads(response.content)
+        self.assertEqual(response_todo["todo"], "test_edit_mixer_todo")
