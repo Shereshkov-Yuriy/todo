@@ -1,12 +1,10 @@
-# Todo, Project
-# APISimpleTestCase, APITestCase
 # from mixer.backend.django import mixer
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework import status
-from rest_framework.test import APIClient, APIRequestFactory, force_authenticate
+from rest_framework.test import APIClient, APIRequestFactory, APITestCase, force_authenticate
 
-from .models import Project
+from .models import Project, Todo
 from .views import ProjectModelViewSet
 
 
@@ -65,3 +63,31 @@ class TestProjectViewSet(TestCase):
         self.assertEqual(project_update.title, "Point Update")
         self.assertEqual(project_update.link_repo, "http://point_update.repo")
         client.logout()
+
+
+class TestTodoViewSet(APITestCase):
+    def setUp(self) -> None:
+        self.username = "admin8"
+        self.password = "Admin_8888"
+        User = get_user_model()
+        self.admin = User.objects.create_superuser(self.username, "admin@adm.ru", self.password)
+        self.url = "/api/todo/"
+        self.data = {"title": "Point", "link_repo": "http://point.repo"}
+        self.data_put = {"title": "Point Update", "link_repo": "http://point_update.repo"}
+        return super().setUp()
+
+    def test_get_list(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_edit_admin(self):
+        project = Project.objects.create(**self.data)
+        todo = Todo.objects.create(todo="test_todo", user=self.admin, project=project)
+        self.client.login(username=self.username, password=self.password)
+        response = self.client.put(
+            f"{self.url}{todo.id}/", {"todo": "test_update", "user": todo.user.id, "project": todo.project.id}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        todo_update = Todo.objects.get(id=todo.id)
+        self.assertEqual(todo_update.todo, "test_update")
+        self.client.logout()
