@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "django_filters",
     "corsheaders",
     "rest_framework",
-    "rest_framework.authtoken",
+    # "rest_framework.authtoken",
     "authapp.apps.AuthappConfig",
     "mainapp.apps.MainappConfig",
 ]
@@ -143,16 +143,17 @@ MEDIA_ROOT = BASE_DIR / "media"
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
 REST_FRAMEWORK = {
-    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    # "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 100,
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
+        # "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
-        # "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
-        "rest_framework.permissions.IsAuthenticated",
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
+        # "rest_framework.permissions.IsAuthenticated",
     ],
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
@@ -161,6 +162,7 @@ REST_FRAMEWORK = {
         # Any other renders
     ],
     "DEFAULT_PARSER_CLASSES": (
+        "rest_framework.parsers.JSONParser",
         # If you use MultiPartFormParser or FormParser, we also have a camel case version
         "djangorestframework_camel_case.parser.CamelCaseFormParser",
         "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",

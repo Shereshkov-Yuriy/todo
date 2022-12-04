@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 class Project(models.Model):
     title = models.CharField(max_length=256, verbose_name=_("Name"))
     link_repo = models.URLField(unique=True, verbose_name=_("Repository"))
-    users = models.ManyToManyField(get_user_model(), verbose_name=_("Users"))
+    users = models.ManyToManyField(get_user_model(), blank=True, verbose_name=_("Users"))
 
     def __str__(self) -> str:
         return f"{self.title} {list(self.users.values_list('username', flat=True))}"
