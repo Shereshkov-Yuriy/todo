@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "django_filters",
     "corsheaders",
     "rest_framework",
-    # "rest_framework.authtoken",
+    "rest_framework.authtoken",
     "authapp.apps.AuthappConfig",
     "mainapp.apps.MainappConfig",
 ]
@@ -148,7 +148,7 @@ REST_FRAMEWORK = {
     # 'PAGE_SIZE': 100,
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.BasicAuthentication",
-        # "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
@@ -170,6 +170,7 @@ REST_FRAMEWORK = {
         # Any other parsers
     ),
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.QueryParameterVersioning",
+    # "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.AcceptHeaderVersioning",
 }
 
 if DEBUG:

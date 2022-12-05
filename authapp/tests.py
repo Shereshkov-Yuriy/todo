@@ -1,4 +1,4 @@
-# import requests
+import requests
 
 # url_token = "http://127.0.0.1:8000/api-token-auth/"
 # url_projects = "http://127.0.0.1:8000/api/projects/"
@@ -20,3 +20,10 @@
 # if settings.DEBUG:
 #     for user in User.objects.all():
 #         Token.objects.get_or_create(user=user)
+
+response = requests.get("http://127.0.0.1:8000/api/users/")
+# [{'id': 1, 'name': 'Грин', 'birthday_year': 1880}, {'id': 2, 'name': 'Пушкин', 'birthday_year': 1799}]
+print(response.json())
+response = requests.get("http://127.0.0.1:8000/api/users/", headers={"Accept": "application/json; version=service"})
+# [{'name': 'Грин'}, {'name': 'Пушкин'}]
+print(response.json())
