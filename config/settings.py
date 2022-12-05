@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "authapp.apps.AuthappConfig",
     "mainapp.apps.MainappConfig",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
