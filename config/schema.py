@@ -60,4 +60,55 @@ class Query(ObjectType):
         return None
 
 
-schema = graphene.Schema(query=Query)
+class TodoUpdateMutation(graphene.Mutation):
+    class Arguments:
+        text = graphene.String(required=True)
+        id = graphene.ID()
+
+    todo = graphene.Field(TodoType)
+
+    @classmethod
+    def mutate(self, root, info, text, id):
+        todo = Todo.objects.get(id=id)
+        todo.todo = text
+        todo.save()
+        return TodoUpdateMutation(todo=todo)
+
+
+class ProjectCreateMutation(graphene.Mutation):
+    class Arguments:
+        title = graphene.String(required=True)
+        link_repo = graphene.String(required=True)
+
+    project = graphene.Field(ProjectType)
+
+    @classmethod
+    def mutate(self, root, info, title, link_repo):
+        project = Project.objects.create(title=title, link_repo=link_repo)
+        return ProjectCreateMutation(project=project)
+
+
+class ProjectDeleteMutation(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID()
+
+    project = graphene.List(ProjectType)
+
+    @classmethod
+    def mutate(self, root, info, id):
+        try:
+            Project.objects.get(id=id).delete()
+            project = Project.objects.all()
+            return ProjectDeleteMutation(project=project)
+        except Project.DoesNotExist:
+            project = Project.objects.all()
+            return ProjectDeleteMutation(project=project)
+
+
+class Mutation(ObjectType):
+    update_todo = TodoUpdateMutation.Field()
+    create_project = ProjectCreateMutation.Field()
+    delete_project = ProjectDeleteMutation.Field()
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
