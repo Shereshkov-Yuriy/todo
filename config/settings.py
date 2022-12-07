@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "authapp.apps.AuthappConfig",
     "mainapp.apps.MainappConfig",
     "drf_yasg",
+    "graphene_django",
 ]
 
 MIDDLEWARE = [
@@ -176,3 +177,5 @@ REST_FRAMEWORK = {
 
 if DEBUG:
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append("rest_framework.renderers.BrowsableAPIRenderer")
+
+GRAPHENE = {"SCHEMA": "config.schema.schema"}
