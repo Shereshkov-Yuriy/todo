@@ -14,6 +14,7 @@ import Menu from "./components/Menu";
 import Footer from "./components/Footer";
 import NotFound404 from "./components/NotFound404";
 import ProjectForm from "./components/ProjectForm";
+import TodoForm from "./components/TodoForm";
 
 // view the page from the virtualhost
 const HOST = "http://192.168.1.41:8000/"
@@ -29,6 +30,29 @@ class App extends React.Component {
       "more_todo": [],
       "token": "",
     }
+  }
+
+  create_todo(project, todo, user) {
+    const headers = this.get_headers()
+    const urlTodo = `${HOST}api/todo/`
+    const dataTodo = { project: project, todo: todo, user: user }
+    axios.post(urlTodo, dataTodo, { headers }).then(response => {
+      this.load_data()
+    }).catch(error => {
+      console.log(error)
+      this.setState({ "todo": [] })
+    })
+  }
+
+  delete_todo(id) {
+    const headers = this.get_headers()
+    const urlTodoId = `${HOST}api/todo/${id}`
+    axios.delete(urlTodoId, { headers }).then(response => {
+      this.load_data()
+    }).catch(error => {
+      console.log(error)
+      this.setState({ "todo": [] })
+    })
   }
 
   create_project(title, link_repo) {
@@ -158,13 +182,19 @@ class App extends React.Component {
                 this.state.more_todo}/>}/>
               <Route path="create" element={<ProjectForm create_project={
                 (title, link_repo) => this.create_project(title, link_repo)
-                }/>}/>
+              }/>}/>
             </Route>
             
-            <Route exact path="/todo" element={<TodoList more_todo={
-              this.state.more_todo}/>}/>
-            <Route exact path="/login" element={<LoginForm get_token={
-              (username, password) => this.get_token(username, password)}/>}/>
+            <Route exact path="/todo" element={
+              <TodoList more_todo={this.state.more_todo} 
+              delete_todo={(id) => this.delete_todo(id)}/>}/>
+            <Route exact path="/todo/create" element={
+              <TodoForm create_todo={(project, todo, user) => 
+              this.create_todo(project, todo, user)}/>}/>
+            <Route exact path="/login" element={
+              <LoginForm get_token={
+                (username, password) => this.get_token(username, password)
+              }/>}/>
 
             <Route path="*" element={<NotFound404/>}/>
           </Routes>
