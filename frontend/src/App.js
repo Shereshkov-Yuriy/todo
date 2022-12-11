@@ -177,7 +177,8 @@ class App extends React.Component {
             <Route exact path="/" element={<UserList users={
               this.state.users}/>}/>
             <Route path="/projects">
-              <Route index element={<ProjectList projects={this.state.projects} delete_project={(id) => this.delete_project(id)}/>}/>
+              <Route index element={<ProjectList projects={this.state.projects}
+                delete_project={(id) => this.delete_project(id)}/>}/>
               <Route path=":projectId" element={<TodoProject more_todo={
                 this.state.more_todo}/>}/>
               <Route path="create" element={<ProjectForm create_project={
@@ -190,7 +191,9 @@ class App extends React.Component {
               delete_todo={(id) => this.delete_todo(id)}/>}/>
             <Route exact path="/todo/create" element={
               <TodoForm create_todo={(project, todo, user) => 
-              this.create_todo(project, todo, user)}/>}/>
+                this.create_todo(project, todo, user)}
+                projects={this.state.projects}
+                users={this.state.users}/>}/>
             <Route exact path="/login" element={
               <LoginForm get_token={
                 (username, password) => this.get_token(username, password)
