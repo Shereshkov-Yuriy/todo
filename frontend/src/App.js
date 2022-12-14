@@ -13,6 +13,13 @@ import TodoProject from "./components/TodoProject";
 import Menu from "./components/Menu";
 import Footer from "./components/Footer";
 import NotFound404 from "./components/NotFound404";
+import ProjectForm from "./components/ProjectForm";
+import TodoForm from "./components/TodoForm";
+
+// view the page from the virtualhost
+const HOST = "http://192.168.1.41:8000/"
+// view the page from the localhost
+// const HOST = "http://localhost:8000/"
 
 class App extends React.Component {
   constructor(props) {
@@ -23,6 +30,52 @@ class App extends React.Component {
       "more_todo": [],
       "token": "",
     }
+  }
+
+  create_todo(project, todo, user) {
+    const headers = this.get_headers()
+    const urlTodo = `${HOST}api/todo/`
+    const dataTodo = { project: project, todo: todo, user: user }
+    axios.post(urlTodo, dataTodo, { headers }).then(response => {
+      this.load_data()
+    }).catch(error => {
+      console.log(error)
+      this.setState({ "todo": [] })
+    })
+  }
+
+  delete_todo(id) {
+    const headers = this.get_headers()
+    const urlTodoId = `${HOST}api/todo/${id}`
+    axios.delete(urlTodoId, { headers }).then(response => {
+      this.load_data()
+    }).catch(error => {
+      console.log(error)
+      this.setState({ "todo": [] })
+    })
+  }
+
+  create_project(title, link_repo) {
+    const headers = this.get_headers()
+    const urlProject = `${HOST}api/projects/`
+    const dataProject = {title: title, link_repo: link_repo}
+    axios.post(urlProject, dataProject, {headers}).then(response => {
+      this.load_data()
+    }).catch(error => {
+      console.log(error)
+      this.setState({"projects": []})
+    })
+  }
+
+  delete_project(id) {
+    const headers = this.get_headers()
+    const urlProjectId = `${HOST}api/projects/${id}`
+    axios.delete(urlProjectId, {headers}).then(response => {
+      this.load_data()
+    }).catch(error => {
+      console.log(error)
+      this.setState({"projects": []})
+    })
   }
 
   logout() {
@@ -52,7 +105,7 @@ class App extends React.Component {
 
   get_token(username, password) {
     const data = {username: username, password: password}
-    const url_token = "http://192.168.1.41:8000/api-token/"
+    const url_token = `${HOST}api-token/`
     axios.post(url_token, data).then(response => {
       this.set_token(response.data["token"])
     }).catch(() => alert("Invalid username or password."))
@@ -70,10 +123,7 @@ class App extends React.Component {
 
   load_data() {
     const headers = this.get_headers()
-    // view the page from the host
-    const urlUser = "http://192.168.1.41:8000/api/users/"
-    // view the page from the localhost
-    // const urlUser = "http://localhost:8000/api/users/"
+    const urlUser = `${HOST}api/users/`
     axios.get(urlUser, {headers}).then(response => {
       this.setState(
         {
@@ -82,10 +132,7 @@ class App extends React.Component {
       )
     }).catch(error => console.log(error))
 
-    // view the page from the host
-    const urlProject = "http://192.168.1.41:8000/api/projects/"
-    // view the page from the localhost
-    // const urlProject = "http://localhost:8000/api/projects/"
+    const urlProject = `${HOST}api/projects/`
     axios.get(urlProject, {headers}).then(response => {
       this.setState(
         {
@@ -94,10 +141,7 @@ class App extends React.Component {
       )
     }).catch(error => console.log(error))
 
-    // view the page from the host
-    const urlTodo = "http://192.168.1.41:8000/api/todo/"
-    // view the page from the localhost
-    // const urlTodo = "http://localhost:8000/api/todo/"
+    const urlTodo = `${HOST}api/todo/`
     axios.get(urlTodo, {headers}).then(response => {
       this.setState(
         {
@@ -130,15 +174,30 @@ class App extends React.Component {
 
           <Routes>
             <Route exact path="/users" element={<Navigate to='/'/>}/>
-            <Route exact path="/" element={<UserList users={this.state.users}/>}/>
+            <Route exact path="/" element={<UserList users={
+              this.state.users}/>}/>
             <Route path="/projects">
-              <Route index element={<ProjectList projects={this.state.projects}/>}/>
-              <Route path=":projectId" element={<TodoProject more_todo={this.state.more_todo}/>}/>
+              <Route index element={<ProjectList projects={this.state.projects}
+                delete_project={(id) => this.delete_project(id)}/>}/>
+              <Route path=":projectId" element={<TodoProject more_todo={
+                this.state.more_todo}/>}/>
+              <Route path="create" element={<ProjectForm create_project={
+                (title, link_repo) => this.create_project(title, link_repo)
+              }/>}/>
             </Route>
             
-            <Route exact path="/todo" element={<TodoList more_todo={this.state.more_todo}/>}/>
-            <Route exact path="/login" element={<LoginForm get_token={(username, password) =>
-              this.get_token(username, password)}/>}/>
+            <Route exact path="/todo" element={
+              <TodoList more_todo={this.state.more_todo} 
+              delete_todo={(id) => this.delete_todo(id)}/>}/>
+            <Route exact path="/todo/create" element={
+              <TodoForm create_todo={(project, todo, user) => 
+                this.create_todo(project, todo, user)}
+                projects={this.state.projects}
+                users={this.state.users}/>}/>
+            <Route exact path="/login" element={
+              <LoginForm get_token={
+                (username, password) => this.get_token(username, password)
+              }/>}/>
 
             <Route path="*" element={<NotFound404/>}/>
           </Routes>
