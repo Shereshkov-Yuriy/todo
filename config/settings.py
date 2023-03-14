@@ -163,14 +163,14 @@ REST_FRAMEWORK = {
         "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
         # Any other renders
     ],
-    "DEFAULT_PARSER_CLASSES": (
+    "DEFAULT_PARSER_CLASSES": [
         "rest_framework.parsers.JSONParser",
         # If you use MultiPartFormParser or FormParser, we also have a camel case version
         "djangorestframework_camel_case.parser.CamelCaseFormParser",
         "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",
         "djangorestframework_camel_case.parser.CamelCaseJSONParser",
         # Any other parsers
-    ),
+    ],
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.QueryParameterVersioning",
     # "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.AcceptHeaderVersioning",
 }
